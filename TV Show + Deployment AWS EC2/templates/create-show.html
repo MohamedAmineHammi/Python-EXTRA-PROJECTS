@@ -1,0 +1,153 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<title>create - show</title>
+	<style type="text/css">
+				*{
+			margin: 0;
+			padding: 0;
+		}
+
+		body{
+			font-family: arial;
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+		}
+
+		.show-form{
+
+			width: 35%;
+			font-size: 1.2vw;
+
+		}
+
+		.input{
+			width: 100%;
+			display: flex;
+			align-items: center;
+			margin: 7% 0;
+		}
+
+		.input input{
+			width: 80%;
+			padding: 3%;
+			outline: none;
+			outline: none;
+			font-size: 1.3vw;
+		}
+
+		.input p{
+			width: 60%;
+			font-size: 1.9vw;
+		}
+
+		.input textarea{
+			width: 80%;
+			height: 120px;
+			resize: none;
+			padding: 2%;
+			font-family: arial;
+			font-size: 1.3vw;
+			outline: none;
+		}
+
+		button{
+
+			width: 100%;
+			padding: 3%;
+			font-size: 1.4vw;
+
+		}
+	</style>
+</head>
+<body>
+
+
+	<div class="show-form">
+		<h1>User : <span id="userActive">{{user}}</span></h1>
+		<br>
+		<br>
+		<div class="input">
+			<p>Title :</p>
+			<input type="text" id="title" placeholder="title" />
+		</div>
+		<div class="input">
+			<p>Network :</p>
+			<input type="text" id="network" placeholder="network" />
+		</div>
+		<div class="input">
+			<p>Date :</p>
+			<input type="date" id="release_date" placeholder="date" />
+		</div>
+		<div class="input">
+			<p>Description :</p>
+			<textarea id="description" placeholder="description"></textarea>
+		</div>
+		<button id="addBtn">Add</button>
+	</div>
+
+
+	<script>
+		
+		document.querySelector("#addBtn").addEventListener("click",()=>{
+
+			var title = document.querySelector("#title").value+""
+			var network = document.querySelector("#network").value+""
+			var release_date = document.querySelector("#release_date").value+""
+			var description = document.querySelector("#description").value+""
+
+			if(title !== "" && network !== "" && release_date !== "" && description !== ""){
+
+		   		var dataRegister = {
+				    title:title,
+				    network:network,
+				    release_show:release_date,
+				    like_show:0,
+				    description:description,
+				    userCreate:document.querySelector("#userActive").innerText
+
+				}
+	   			add(dataRegister)
+
+		   	}else{
+
+		   		alert("All fields required")
+
+		   	}
+
+			
+
+
+		   	function add(data){
+
+			   	$.ajax({
+					url: "/show/create",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify(data), 
+					success: (res)=>{
+						if(res.length > 0){
+							res.forEach(r=>{
+								if(r.message === "success"){
+									alert("show created successfully")
+									window.location.href = "/shows"
+								}
+							})
+						}
+						
+						
+
+					}
+			   	})
+		   	}
+
+		})
+
+	</script>
+
+</body>
+</html>

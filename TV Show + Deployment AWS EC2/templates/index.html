@@ -1,0 +1,242 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<title></title>
+	<style type="text/css">
+			
+		*{
+			margin: 0;
+			padding: 0;
+		}
+
+		body{
+			font-family: arial;
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+		}
+
+		.form{
+
+			width: 35%;
+			text-align: center;
+			font-size: 1.2vw;
+
+		}
+
+		.input{
+			width: 100%;
+			display: flex;
+			align-items: center;
+			margin: 7% 0;
+		}
+
+		.input input{
+			width: 80%;
+			padding: 3%;
+			outline: none;
+			outline: none;
+			font-size: 1.3vw;
+		}
+
+		.input p{
+			width: 60%;
+			font-size: 1.4vw;
+		}
+
+		button{
+
+			width: 100%;
+			padding: 3%;
+			font-size: 1.4vw;
+
+		}
+
+	</style>
+
+</head>
+<body>
+
+
+	<div class="from register-form">
+		<h1>Register</h1>
+		<br>
+		<br>
+		<div class="input">
+			<p>Fist Name :</p>
+			<input type="text" id="first_name" placeholder="First name" />
+		</div>
+		<div class="input">
+			<p>Last Name :</p>
+			<input type="text" id="last_name" placeholder="Last name" />
+		</div>
+		<div class="input">
+			<p>Email :</p>
+			<input type="text" id="email" placeholder="Email" />
+		</div>
+		<div class="input">
+			<p>Password :</p>
+			<input type="password" id="password" placeholder="Password" />
+		</div>
+		<div class="input">
+			<p>Confirm password:</p>
+			<input type="password" id="confirm_password" placeholder="Confirm password" />
+		</div>
+		<button id="registerBtn">Register</button>
+	</div>
+
+	<div class="login-form">
+		<h1>login</h1>
+		<br>
+		<br>
+		<div class="input">
+			<p>Email :</p>
+			<input type="email" id="emailLog" placeholder="Email" />
+		</div>
+		<div class="input">
+			<p>Password :</p>
+			<input type="password" id="passwordLog" placeholder="password" />
+		</div>
+		<button id="loginBtn">Login</button>
+	</div>
+
+
+	<script type="text/javascript">
+		document.querySelector("#registerBtn").addEventListener("click",()=>{
+			var email = document.querySelector("#email").value+""
+			var password = document.querySelector("#password").value+""
+			var first_name = document.querySelector("#first_name").value+""
+			var last_name = document.querySelector("#last_name").value+""
+			var cpass = document.querySelector("#confirm_password").value+""
+
+			if(email !== "" && password !== "" && first_name !== "" && last_name !== ""){
+				if(first_name.length >= 2 && last_name.length >= 2){
+					if(password === cpass){
+			   			var dataRegister = {
+						    email:email,
+						    password:password,
+						    first_name:first_name,
+						    last_name:last_name
+
+						}
+						$.ajax({
+							url: "/check-user",
+							type: "POST",
+							dataType: "json",
+							contentType: "application/json",
+							data: JSON.stringify({email:email}), 
+							success: (res)=>{
+								res.forEach(r=>{
+									console.log(r)
+									if(r.message === "exist"){
+										alert("Email used")
+									}else if(r.message === "not exist"){
+										register(dataRegister)
+									}else{
+										console.log(r.message)
+									}
+								})
+								
+
+							}
+					   	})
+
+			   		}else{
+			   			alert("password not confirmed")
+			   		}
+				}else{
+					alert("Fisrt name and Last name must be at least 2 characters")
+				}
+		   		
+
+		   }else{
+
+		   		alert("All fields required")
+
+		   }
+
+			
+
+
+		   function register(data){
+
+			   	$.ajax({
+					url: "/register",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify(data), 
+					success: (res)=>{
+						res.forEach(r=>{
+							if(r.message === "success"){
+								alert("you can login to your account now")
+							}
+						})
+						
+
+					}
+			   	})
+		   }
+
+		})
+
+		document.querySelector("#loginBtn").addEventListener("click",()=>{
+
+			var email = document.querySelector("#emailLog").value+""
+			var password = document.querySelector("#passwordLog").value+""
+
+			if(email !== "" && password !== ""){
+
+		   		var dataRegister = {
+				    email:email,
+				    password:password
+
+				}
+	   			login(dataRegister)
+
+		   	}else{
+
+		   		alert("All fields required")
+
+		   	}
+
+			
+
+
+		   function login(data){
+
+			   	$.ajax({
+					url: "/login",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify(data), 
+					success: (res)=>{
+						if(res.length > 0){
+							res.forEach(r=>{
+								if(r.message === "password incorrect"){
+									alert("password invalid")
+								}else if(r.message === "email invalid"){
+									alert("email invalid")
+								}else{
+									window.location.href="/shows"
+								}
+							})
+						}else{
+							alert("Email invalid")
+						}
+						
+						
+
+					}
+			   	})
+		   }
+
+		})
+
+	</script>
+
+</body>
+</html>

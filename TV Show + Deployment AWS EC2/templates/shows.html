@@ -1,0 +1,162 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<title>Shows</title>
+	<style type="text/css">
+		body{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: arial;
+		}
+		.content{
+			width: 80%;
+		}
+		.table{
+
+			width: 100%;
+			background: green;
+
+		}
+
+		.table .header{
+
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			background-color: #d6d6d6;
+			height: 10%;
+
+		}
+
+		.table .header .hd-it{
+
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 2vw;
+			text-align: center;
+			width: 20%;
+			border-left: .1vw solid #484848;
+
+		}
+
+		.table .header .hd-it.end{
+
+			border-right: .1vw solid #484848;
+
+		}
+
+		.table .item{
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			background-color: #f5f5f5;
+			height: 7%;
+		}
+
+		.table .item .hd-it{
+
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.5vw;
+			text-align: center;
+			width: 20%;
+			border-left: .1vw solid #484848;
+
+		}
+
+		.table .item .hd-it.end{
+
+			border-right: .1vw solid #484848;
+
+		}
+
+		.buttons{
+
+			position: absolute;
+			top: 4%;
+			right: 5%;
+			font-size: 1.3vw;
+			width: 13%;
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+			font-size: 1.6vw;
+
+		}
+
+
+	</style>
+</head>
+<body>
+
+	<h1 style="    position: absolute;
+    top: 5%;
+    left: 3%;">{{user}}</h1>
+
+	<div class="buttons">
+		<a href="/shows/new">Create</a>
+		<a href="/logout">Logout</a>
+	</div>
+
+	<div class="content">
+		<h1>All Tv Shows</h1>
+		<div class="table">
+			<div class="header">
+				<div class="hd-it">Title</div>
+				<div class="hd-it">Network</div>
+				<div class="hd-it">Release Date</div>
+				<div class="hd-it">Actions</div>
+				<div class="hd-it end">Like</div>
+			</div>
+			{% for item in data %}
+	        	{% if item.userCreate != user  %}
+	        		<div class="item">
+						<div class="hd-it">{{item.title}}</div>
+						<div class="hd-it">{{item.network}}</div>
+						<div class="hd-it">{{item.date}}</div>
+						<div class="hd-it">
+							<a href="/shows/{{item.id}}">show</a>
+						</div>
+						<div class="hd-it end">
+							{% if item.react == 'null' %}
+								<a href="/react_up/{{item.id}}/{{user}}">Like</a>
+							{% else %}
+								<a href="/react_down/{{item.id}}">Unlike</a>
+							{% endif %}
+						</div>
+					</div>
+				{% else %}
+					<div class="item">
+						<div class="hd-it">{{item.title}}</div>
+						<div class="hd-it">{{item.network}}</div>
+						<div class="hd-it">{{item.date}}</div>
+						<div class="hd-it">
+							<a href="/shows/{{item.id}}">show</a>&nbsp;&nbsp;
+							<a href="/shows/edit/{{item.id}}">edit</a>&nbsp;&nbsp;
+							<a href="/show/delete/{{item.id}}">delete</a></div>
+						<div class="hd-it end">
+							{% if item.react == 'null' %}
+								<a href="/react_up/{{item.id}}/{{user}}">Like</a>
+							{% else %}
+								<a href="/react_down/{{item.id}}">Unlike</a>
+							{% endif %}
+						</div>
+					</div>
+				{% endif  %}
+        	{%endfor%}
+			
+
+		</div>
+	</div>
+
+</body>
+</html>
