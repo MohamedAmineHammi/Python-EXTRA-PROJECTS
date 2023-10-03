@@ -1,0 +1,2 @@
+Adresse Ip ===> http://16.16.196.190/
+DNS IPv4 ====> ec2-16-16-196-190.eu-north-1.compute.amazonaws.com 
