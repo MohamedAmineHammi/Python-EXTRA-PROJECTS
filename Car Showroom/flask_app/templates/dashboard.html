@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Car Dealz</title>
+</head>
+<body>
+    <div class="container col-10 mx-auto mt-2">
+        <div class="d-flex justify-content-between align-items-center py-2 px-5">
+            <h2 style="color: blue;">Welcome to Car Dealz {{user.first_name}} !</h2>
+            <div>
+                <a href="/purchases" class="btn btn-warning btn-lg">My Purchases</a>
+                <a href="/logout" class="btn btn-danger btn-lg">Logout</a>
+            </div>
+        </div>
+        <h3>Cars for sale</h3>
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Year</th>
+                    <th>Seller</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for car in cars %}
+                    <tr>
+                        <td>{{car.model}}</td>
+                        <td>{{car.year}}</td>
+                        <td>{{car.seller}}</td>
+                        <td>
+                            {% if car.user_id != session.user_id %}
+                            <a href="/show/{{car.id}}">View</a> 
+                            {% endif %}
+                            {% if car.user_id == session.user_id %}
+                            <a href="/edit/{{car.id}}">Edit</a> 
+                            <a href="/destroy/{{car.id}}">Delete</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div>
+            <a href="/new" class="btn btn-secondary btn-lg">Add A Car</a>
+        </div>
+    </div>
+</body>
+</html>
